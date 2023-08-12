@@ -9,23 +9,23 @@ Melina Figueroa - Celeste Demaria - Anicia Flores - Jazmin Araniti - Berenice Ba
 
 :small_blue_diamond: Pre-entrega 1:
 
-● Crear la estructura básica de un servidor web utilizando Express JS.
-● Incluye el archivo .ENV donde debes almacenar en una variable de entorno con la ruta parcial + nombre del archivo de datos JSON, además del puerto de ejecución del servidor web.
-● El archivo JSON debes guardarlo en una subcarpeta del proyecto llamada /database/
-● El número de puerto del servidor web debe ser 3008
-● Carga en una constante llamada TRAILERFLIX el contenido del archivo JSON en formato Array de objetos (usando fileSystem API + JSON.parse para obtener y transformar los datos)
-● Crea un contenido en formato texto de bienvenida para la ruta raíz del proyecto “/”. El mensaje a mostrar puede ser texto plano, o contenido HTML. (Mejor si es este último)
+* Crear la estructura básica de un servidor web utilizando Express JS.
+* Incluye el archivo .ENV donde debes almacenar en una variable de entorno con la ruta parcial + nombre del archivo de datos JSON, además del puerto de ejecución del servidor web.
+* El archivo JSON debes guardarlo en una subcarpeta del proyecto llamada /database/
+* El número de puerto del servidor web debe ser 3008
+* Carga en una constante llamada TRAILERFLIX el contenido del archivo JSON en formato Array de objetos (usando fileSystem API + JSON.parse para obtener y transformar los datos)
+* Crea un contenido en formato texto de bienvenida para la ruta raíz del proyecto “/”. El mensaje a mostrar puede ser texto plano, o contenido HTML. (Mejor si es este último)
 
 Con la estructura base del proyecto ya desarrollada, deberás crear los endpoints necesarios para listar el catálogo de películas y series por diferentes posibles búsquedas.
 
 Endpoints:
 
-● /catalogo que liste todo el contenido de trailerflix JSON
-● /titulo/:title que liste el catálogo de películas y/o series que se
+* /catalogo que liste todo el contenido de trailerflix JSON
+* /titulo/:title que liste el catálogo de películas y/o series que se
 aproxime al título enviado. (la búsqueda del nombre debe ser parcial)
-● /categoria/:cat que liste todo el contenido del archivo JSON de acuerdo a la categoría enviada como parámetro (serie o película)
-● /reparto/:act que liste el catálogo que incluya a la actriz o actor indicado por el nombre. (la búsqueda del nombre debe ser parcial)
-● /trailer/:id que retorne la URL del trailer de la película o serie. Si ésta no posee video asociado, que retorne un mensaje en formato JSON notificando la no disponibilidad del mismo.
+* /categoria/:cat que liste todo el contenido del archivo JSON de acuerdo a la categoría enviada como parámetro (serie o película)
+* /reparto/:act que liste el catálogo que incluya a la actriz o actor indicado por el nombre. (la búsqueda del nombre debe ser parcial)
+* /trailer/:id que retorne la URL del trailer de la película o serie. Si ésta no posee video asociado, que retorne un mensaje en formato JSON notificando la no disponibilidad del mismo.
 
 
 1. Para el endpoint /catalogo debes retornar todo el contenido del archivo
