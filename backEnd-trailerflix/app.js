@@ -49,6 +49,7 @@ app.get('/reparto/:act', (req, res) => {
 });
 
 //Endpoint para buscar por id
+/*
 app.get('/trailer/:id', (req, res) => {
     const id_trailer = req.params.id;
     const pelicula = trailerFlix.find(e => e.id === parseInt(id_trailer));
@@ -60,7 +61,24 @@ app.get('/trailer/:id', (req, res) => {
         res.status(404).json({mensaje: 'Contenido no encontrado'});
     }
 });
-
+*/
+//Endpoint para buscar por id por objeto
+app.get('/trailer/:id', (req, res) => {
+    const id_trailer = req.params.id;
+    const pelicula = trailerFlix.find(e => e.id === parseInt(id_trailer));
+    const response = [
+        {
+            id: pelicula.id,
+            titulo: pelicula.titulo,
+            trailer: pelicula.trailer ? pelicula.trailer : 'Trailer no disponible'
+        }
+    ];
+    if (pelicula) {
+        res.json({ id: response.id, titulo: response.titulo, trailer: response })
+    } else {
+        res.status(404).json({ mensaje: 'Contenido no encontrado' });
+    }
+});
 
 //Manejo de errores
 app.get('*', (req, res) => {
