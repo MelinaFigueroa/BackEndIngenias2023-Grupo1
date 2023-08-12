@@ -61,18 +61,6 @@ app.get('/trailer/:id', (req, res) => {
     }
 });
 
-//Endpoint para verificar si existe y contiene videos
-app.get('/trailer/:id', (req, res) => {
-    const id_trailer = req.params.id;
-    const pelicula = trailerFlix.find(e => e.id === parseInt(id_trailer));
-
-    if (pelicula) {
-        const res_trailer = pelicula.trailer || 'Trailer no disponible';
-        res.json({id: pelicula.id, titulo: pelicula.titulo, trailer: res_trailer})
-    }else{
-        res.status(404).json({mensaje: 'Contenido no encontrado'});
-    }
-});
 
 //Manejo de errores
 app.get('*', (req, res) => {
