@@ -17,6 +17,10 @@ const trailerFlix = JSON.parse(fs.readFileSync(path.join(__dirname, JSON_FILE_PA
 
 const ruta = path.normalize('localhost:3008/categoria/Película');
 
+const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 //Ruta bienvenida
 app.get('/', (req, res) => {
     res.send(`<h1> Bienvenido a TrailerFlix Api </h1>`);
@@ -29,22 +33,22 @@ app.get('/catalogo', (req, res) => {
 
 //Endpoint para filtar titulo
 app.get('/titulo/:title', (req, res) => {
-    const titulo = req.params.title.toLowerCase();
-    const resultado = trailerFlix.filter(e => e.titulo.toLowerCase().includes(titulo));
+    const titulo = removeAccents(req.params.title.toLowerCase());
+    const resultado = trailerFlix.filter(e => removeAccents(e.titulo.toLowerCase()).includes(titulo));
     res.json(resultado)
 });
 
 //Endpoint para filtar por categoria
 app.get('/categoria/:cat', (req, res) => {
-    const cat = req.params.cat.toLowerCase();
-    const resultado = trailerFlix.filter(e => e.categoria.toLowerCase() === cat);
+    const cat = removeAccents(req.params.cat.toLowerCase());
+    const resultado = trailerFlix.filter(e => removeAccents(e.categoria.toLowerCase()) === cat);
     res.json(resultado);
 });
 
 //Endpoint para filtar por reparto
 app.get('/reparto/:act', (req, res) => {
-    const reparto = req.params.act.toLowerCase();
-    const resultado = trailerFlix.filter(e => e.reparto.toLowerCase().includes(reparto)).map(e => ({ titulo: e.titulo, reparto: e.reparto }));
+    const reparto = removeAccents(req.params.act.toLowerCase());
+    const resultado = trailerFlix.filter(e => removeAccents(e.reparto.toLowerCase()).includes(reparto)).map(e => ({ titulo: e.titulo, reparto: e.reparto }));
     res.json(resultado);
 });
 
@@ -69,7 +73,7 @@ app.get('/trailer/:id', (req, res) => {
     const response = [
         {
             id: pelicula.id,
-            titulo: pelicula.titulo,
+            titulo: removeAccents(pelicula.titulo),
             trailer: pelicula.trailer ? pelicula.trailer : 'Trailer no disponible'
         }
     ];
