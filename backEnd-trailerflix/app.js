@@ -17,6 +17,10 @@ const trailerFlix = JSON.parse(fs.readFileSync(path.join(__dirname, JSON_FILE_PA
 
 const ruta = path.normalize('localhost:3008/categoria/Película');
 
+const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 //Ruta bienvenida
 app.get('/', (req, res) => {
     res.send(`<h1> Bienvenido a TrailerFlix Api </h1>`);
