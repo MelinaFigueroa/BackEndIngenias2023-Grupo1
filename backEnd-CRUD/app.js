@@ -92,7 +92,32 @@ app.post('/computacion', async (req, res) => {
         }).finally(() => { client.close()})
 })
 
-
+// Metodo de actualizacion
+app.put('/computacion/:id', async (req, res) => { 
+    const id = parseInt(req.params.id) || 0;
+    const nuevosDatos = req.body
+    if (!nuevosDatos) {
+        res.status(400).send('Error en el formato de los datos recibidos')
+    }
+    const client = await connectToMongodb();
+    if (!client) {
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
+    }
+    const db = client.db('computacion') 
+    // ,{hint:true} 
+    const collection = await db.collection('articulos').updateOne({ id: id }, { $set: nuevosDatos })
+        .then(() => {
+            let mensaje ='Articulo actualizado ID : ' + id
+          res.status(200).json({ descripcion: mensaje , objeto: nuevosDatos})
+        }).catch(err => { 
+            let mensaje = 'Error al actualizar ID: ' + id 
+            console.error(err)
+            res.status(500).json({descripcion : mensaje, objeto: nuevosDatos})
+        }).finally(() => {
+            client.close()
+        })
+})
 
 //Manejo de errores
 app.get('*', (req, res) => {
