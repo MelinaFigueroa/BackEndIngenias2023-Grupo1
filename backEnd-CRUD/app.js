@@ -122,9 +122,9 @@ app.put('/computacion/:id', async (req, res) => {
 })
 
 // Metodo de eliminacion
-app.delete('/computacion/:id', async (req, res) => { 
-    const id = req.params.id;
-    if (!id) {
+app.delete('/computacion/:codigo', async (req, res) => { 
+    const codigo = req.params.codigo;
+    if (!codigo) {
         res.status(400).send('Error en el formato del id recibido')
     }
     const client = await connectToMongodb();
@@ -135,10 +135,10 @@ app.delete('/computacion/:id', async (req, res) => {
     client.connect()
         .then(() => { 
             const collection = client.db('computacion').collection('articulos')
-            return collection.deleteOne({id: parseInt(id)})
+            return collection.deleteOne({codigo: parseInt(codigo)})
         }).then((resultado) => {
             if (resultado.deletedCount === 0) {
-                res.status(404).send('No se pudo encontrar el articulo con id: '+id)
+                res.status(404).send('No se pudo encontrar el articulo con id: '+codigo)
             } else {
                 console.log('Articulo eliminado')
                 res.status(204).send('Articulo eliminado')
