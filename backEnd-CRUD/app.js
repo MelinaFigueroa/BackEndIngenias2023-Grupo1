@@ -92,6 +92,8 @@ app.post('/computacion', async (req, res) => {
         }).finally(() => { client.close()})
 })
 
+
+
 // Metodo de actualizacion
 app.put('/computacion/:id', async (req, res) => { 
     const id = parseInt(req.params.id) || 0;
@@ -117,6 +119,36 @@ app.put('/computacion/:id', async (req, res) => {
         }).finally(() => {
             client.close()
         })
+})
+
+// Metodo de eliminacion
+app.delete('/computacion/:id', async (req, res) => { 
+    const id = req.params.id;
+    if (!id) {
+        res.status(400).send('Error en el formato del id recibido')
+    }
+    const client = await connectToMongodb();
+    if (!client) {
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
+    }
+    client.connect()
+        .then(() => { 
+            const collection = client.db('computacion').collection('articulos')
+            return collection.deleteOne({id: parseInt(id)})
+        }).then((resultado) => {
+            if (resultado.deletedCount === 0) {
+                res.status(404).send('No se pudo encontrar el articulo con id: '+id)
+            } else {
+                console.log('Articulo eliminado')
+                res.status(204).send('Articulo eliminado')
+            }
+        }).catch((err) => {
+            console.error(err)
+             res.status(500).send('Error al eliminar articulo')
+            }).finally(() => {
+                client.close()
+            })
 })
 
 //Manejo de errores
