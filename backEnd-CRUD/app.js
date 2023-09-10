@@ -95,8 +95,8 @@ app.post('/computacion', async (req, res) => {
 
 
 // Metodo de actualizacion
-app.put('/computacion/:id', async (req, res) => { 
-    const id = parseInt(req.params.id) || 0;
+app.put('/computacion/:codigo', async (req, res) => { 
+    const codigo = parseInt(req.params.codigo) || 0;
     const nuevosDatos = req.body
     if (!nuevosDatos) {
         res.status(400).send('Error en el formato de los datos recibidos')
@@ -108,12 +108,12 @@ app.put('/computacion/:id', async (req, res) => {
     }
     const db = client.db('computacion') 
     // ,{hint:true} 
-    const collection = await db.collection('articulos').updateOne({ id: id }, { $set: nuevosDatos })
+    const collection = await db.collection('articulos').updateOne({ codigo: codigo }, { $set: nuevosDatos })
         .then(() => {
-            let mensaje ='Articulo actualizado ID : ' + id
+            let mensaje ='Articulo actualizado ID : ' + codigo
           res.status(200).json({ descripcion: mensaje , objeto: nuevosDatos})
         }).catch(err => { 
-            let mensaje = 'Error al actualizar ID: ' + id 
+            let mensaje = 'Error al actualizar ID: ' + codigo 
             console.error(err)
             res.status(500).json({descripcion : mensaje, objeto: nuevosDatos})
         }).finally(() => {
