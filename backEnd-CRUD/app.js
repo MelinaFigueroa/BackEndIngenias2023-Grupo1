@@ -1,89 +1,99 @@
 const express = require('express');
-const fs = require('fs');
 const app = express();
 const dotenv = require('dotenv');
-const path = require('path');
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+// para evitar TypeError: Cannot read property '_id' of undefined
+const bodyParser = require('body-parser');
 
-const JSON_FILE_PATH =
-    process.env.JSON_FILE_PATH;
+app.use(bodyParser.json());
 
-//Carga los datos del archivo JSON en formato de array
-const trailerFlix = JSON.parse(fs.readFileSync(path.join(__dirname, JSON_FILE_PATH), 'utf-8'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const ruta = path.normalize('localhost:3008/categoria/Película');
+const { connectToMongodb, disconnectToMongodb} = require('./src/mongoDB');
+
+//Middleware
+app.use((req, res, next) => {
+    res.header("Content-Type", "application/json; charset=utf-8");
+    next();
+});
+
+app.get('/', (req, res) => { res.status(200).end('¡Bienvenido a la API de articulos de computación!'); } );
+// incluyo funciones declaradas en mongodb.js
+
 
 const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
-//Ruta bienvenida
-app.get('/', (req, res) => {
-    res.send(`<h1> Bienvenido a TrailerFlix Api </h1>`);
-});
 
-//Endpoint para listar cat{alogo}
-app.get('/catalogo', (req, res) => {
-    res.json(trailerFlix);
-});
 
-//Endpoint para filtar titulo
-app.get('/titulo/:title', (req, res) => {
-    const titulo = removeAccents(req.params.title.toLowerCase());
-    const resultado = trailerFlix.filter(e => removeAccents(e.titulo.toLowerCase()).includes(titulo));
-    res.json(resultado)
-});
 
-//Endpoint para filtar por categoria
-app.get('/categoria/:cat', (req, res) => {
-    const cat = removeAccents(req.params.cat.toLowerCase());
-    const resultado = trailerFlix.filter(e => removeAccents(e.categoria.toLowerCase()) === cat);
-    res.json(resultado);
-});
-
-//Endpoint para filtar por reparto
-app.get('/reparto/:act', (req, res) => {
-    const reparto = removeAccents(req.params.act.toLowerCase());
-    const resultado = trailerFlix.filter(e => removeAccents(e.reparto.toLowerCase()).includes(reparto)).map(e => ({ titulo: e.titulo, reparto: e.reparto }));
-    res.json(resultado);
-});
-
-//Endpoint para buscar por id
-/*
-app.get('/trailer/:id', (req, res) => {
-    const id_trailer = req.params.id;
-    const pelicula = trailerFlix.find(e => e.id === parseInt(id_trailer));
-
-    if (pelicula) {
-        const res_trailer = pelicula.trailer || 'Trailer no disponible';
-        res.json({id: pelicula.id, titulo: pelicula.titulo, trailer: res_trailer})
-    }else{
-        res.status(404).json({mensaje: 'Contenido no encontrado'});
+//Endpoints lista base de datos
+app.get('/computacion', async (req, res) => {
+    const client = await connectToMongodb();
+    if (!client) {
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
     }
+    const db = client.db('computacion')
+    const computacion = await db.collection('articulos').find().toArray()
+    await disconnectToMongodb()
+    res.json(computacion)
 });
 
-//Endpoint para buscar por id por objeto
-app.get('/trailer/:id', (req, res) => {
-    const id_trailer = req.params.id;
-    const pelicula = trailerFlix.find(e => e.id === parseInt(id_trailer));
-    const response = [
-        {
-            id: pelicula.id,
-            titulo: removeAccents(pelicula.titulo),
-            trailer: pelicula.trailer ? pelicula.trailer : 'Trailer no disponible'
-        }
-    ];
-    if (pelicula) {
-        res.json({ id: response.id, titulo: response.titulo, trailer: response })
-    } else {
-        res.status(404).json({ mensaje: 'Contenido no encontrado' });
+app.get('/computacion/: nombre', async (req, res) =>{
+    const client = await connectToMongodb();
+    if (!client) {
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
     }
+    const db = client.db('computacion')
+    const computacion = await db.collection('articulos').find().toArray()
+    await disconnectToMongodb()
+    res.json(computacion)
 });
-*/
+
+//Ruta para filtrar productos por nombre
+app.get('/computacion/nombre/:letra', async (req, res) => {
+    const nombre_producto = req.params.nombre;
+    const client = await connectToMongodb();
+    if (!client) {
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
+    }
+    const letraInicio = req.params.letra.toLowerCase(); // Letra específica con la que quieres empezar
+    const regex = new RegExp(`^${letraInicio}`, 'i');
+    const db = client.db('computacion')
+    const computacion = await db.collection('articulos').find({ nombre: regex}).toArray()
+    await disconnectToMongodb()
+    computacion.length == 0 ? res.status(404).send('No encontre el articulo con el nombre '+ nombre_producto): res.json(computacion)
+});
+
+app.post('/computacion', async (req, res) => {
+    const nuevo_producto = req.body;
+    if (nuevo_producto === undefined){
+        res.status(400).send('Error en el formato de datos a crear');
+    }
+    const client = await connectToMongodb();
+    if (!client){
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
+    }
+    const db = client.db('computacion') 
+    const collection = await db.collection('articulos').insertOne(nuevo_producto)
+        .then(() => {
+            console.log('Nuevo producto creado')
+            res.status(201).send(nuevo_producto)
+        }).catch(err => { 
+            console.error(err)
+        }).finally(() => { client.close()})
+})
+
+
+
 //Manejo de errores
 app.get('*', (req, res) => {
     res.setHeader('Content-Type', 'application/json');

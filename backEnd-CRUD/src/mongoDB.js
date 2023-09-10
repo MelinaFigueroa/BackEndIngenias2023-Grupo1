@@ -1,13 +1,28 @@
-const express = require('express');
-const fs = require('fs');
-const app = express();
 const dotenv = require('dotenv');
-const path = require('path');
-
 dotenv.config();
-const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+// config db
+const { MongoClient } = require('mongodb');
+const URL = process.env.MONGODB_URLSTRING || "";
+const client = new MongoClient(URL);
 
-const JSON_FILE_PATH =
-    process.env.JSON_FILE_PATH;
+// functions js convencional
+async function connectToMongodb() {
+    try {
+        await client.connect()
+        console.log('Conectado a mongoDB')
+        return client;
+    } catch (error) {
+        console.log('Error al conectarse a mongoDB: ' + error)
+        return null;
+    }
+}
+const disconnectToMongodb = async () => {
+    try {
+        await client.close()
+        console.log('Desconectado de mongoDB')
+    } catch (error) {
+        console.log('Error al desconectarse de mongoDB: ' + error)
+    }
+}
+module.exports = { connectToMongodb, disconnectToMongodb }
