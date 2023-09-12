@@ -101,10 +101,8 @@ app.post('/computacion', async (req, res) => {
             console.error(error);
             res.status(500).send('Error en el servidor');
         } finally { 
-            if (client) {
-            client.close();
+            disconnectToMongodb()
         }
-    }
 });
 // Metodo de actualizacion
 app.put('/computacion/:id', async (req, res) => { 
