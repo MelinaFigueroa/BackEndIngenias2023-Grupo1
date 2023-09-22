@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => { res.status(200).end('¡Bienvenido a la API de articulos de computación!'); } );
+app.get('/', (req, res) => { res.status(200).end('¡Bienvenido a la API de artículos de computación!'); } );
 // incluyo funciones declaradas en mongodb.js
 
 
@@ -45,18 +45,30 @@ app.get('/computacion', async (req, res) => {
 });
 
 app.get('/computacion/:nombre', async (req, res) =>{
-    const client = await connectToMongodb();
-    if (!client) {
-        res.status(500).send('Error al conectarse a MongoDB')
-        return;
+    try {
+        const nombreProducto = req.params.nombre;
+        const client = await connectToMongodb();
+        if (!client) {
+            res.status(500).send('Error al conectarse a MongoDB')
+            return;
     }
-    const db = client.db('computacion')
-    const computacion = await db.collection('articulos').find().toArray()
-    await disconnectToMongodb()
-    res.json(computacion)
+        const db = client.db('computacion')
+        const regexNombre = new RegExp(`^${nombreProducto}$`, 'i'); // 'i' indica insensibilidad a mayúsculas y minúsculas)
+        const computacion = await db.collection('articulos').findOne({ nombre: { $regex: regexNombre } });
+        await disconnectToMongodb()
+
+        if (!computacion) {
+            res.status(404).send('No se encontró el artículo con el nombre: ' + nombreProducto);
+        } else {
+            res.json(computacion);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en el servidor');
+    }
 });
 
-//Ruta para filtrar productos por nombre
+//Ruta para filtrar productos por primera letra del nombre
 app.get('/computacion/nombre/:letra', async (req, res) => {
     try {
         const nombre_producto = req.params.nombre;
@@ -185,7 +197,7 @@ app.delete('/computacion/:codigo', async (req, res) => {
             }
         }).catch((err) => {
             console.error(err)
-             res.status(500).send('Error al eliminar articulo')
+             res.status(500).send('Error al eliminar artículo')
             }).finally(() => {
                 client.close()
             })
