@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => { res.status(200).end('¡Bienvenido a la API de artículos de computación!'); } );
+app.get('/', (req, res) => { res.status(200).end('¡Bienvenido a la API de articulos de computación!'); } );
 // incluyo funciones declaradas en mongodb.js
 
 
@@ -44,114 +44,62 @@ app.get('/computacion', async (req, res) => {
     res.json(computacion)
 });
 
-app.get('/computacion/:nombre', async (req, res) =>{
-    try {
-        const nombreProducto = req.params.nombre;
-        const client = await connectToMongodb();
-        if (!client) {
-            res.status(500).send('Error al conectarse a MongoDB')
-            return;
-    }
-        const db = client.db('computacion')
-        const regexNombre = new RegExp(`^${nombreProducto}$`, 'i'); // 'i' indica insensibilidad a mayúsculas y minúsculas)
-        const computacion = await db.collection('articulos').findOne({ nombre: { $regex: regexNombre } });
-        await disconnectToMongodb()
-
-        if (!computacion) {
-            res.status(404).send('No se encontró el artículo con el nombre: ' + nombreProducto);
-        } else {
-            res.json(computacion);
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error en el servidor');
-    }
-});
-
-//Ruta para filtrar productos por primera letra del nombre
-app.get('/computacion/nombre/:letra', async (req, res) => {
-    try {
-        const nombre_producto = req.params.nombre;
-        const client = await connectToMongodb();
-        if (!client) {
-            throw new Error('Error al conectarse a MongoDB');
-        }
-    const letraInicio = req.params.letra.toLowerCase(); // Letra de inicio de búsqueda
-    const regex = new RegExp(`^${letraInicio}`, 'i');
-    const db = client.db('computacion');
-    const computacion = await db.collection('articulos').find({ nombre: regex}).toArray();
-    await disconnectToMongodb();
-    
-    if(computacion.length === 0) {
-    res.status(404).send('No encontré artículos que empiecen por la letra '+ letraInicio);
-    } else {
-        res.json(computacion);
-    }
-  }catch (error) {
-    console.error(error);
-    res.status(500).send('Error en el servidor');
-  }
-});
-
-app.post('/computacion', async (req, res) => {
-    try {
-        const nuevo_producto = req.body;
-        if (nuevo_producto === undefined){
-            res.status(400).send('Error en el formato de datos a crear');
-        }
-        const client = await connectToMongodb();
-        if (!client){
-         throw new Error('Error al conectarse a MongoDB');
-        }
-    
-        const db = client.db('computacion'); 
-        const collection = await db.collection('articulos').insertOne(nuevo_producto);
-        
-        console.log('Nuevo producto creado');
-        res.status(201).send(nuevo_producto);
-        } catch (error) { 
-            console.error(error);
-            res.status(500).send('Error en el servidor');
-        } finally { 
-            disconnectToMongodb()
-        }
-});
-// Metodo de actualizacion
-app.put('/computacion/:id', async (req, res) => { 
-    const id = parseInt(req.params.id) || 0;
-    const nuevosDatos = req.body;
-    if (!nuevosDatos) {
-        res.status(400).send('Error en el formato de los datos recibidos');
-    }
+app.get('/computacion/: nombre', async (req, res) =>{
     const client = await connectToMongodb();
     if (!client) {
         res.status(500).send('Error al conectarse a MongoDB')
         return;
     }
-    const db = client.db('computacion') 
-    // ,{hint:true} 
-    const collection = await db.collection('articulos').updateOne({ id: id }, { $set: nuevosDatos })
-        .then(() => {
-            let mensaje ='Producto actualizado ID : ' + id;
-          res.status(200).json({ descripcion: mensaje , objeto: nuevosDatos});
-        }).catch(err => { 
-            let mensaje = 'Error al actualizar ID: ' + id;
-            console.error(err);
-            res.status(500).json({descripcion : mensaje, objeto: nuevosDatos});
-        }).finally(() => {
-            client.close();
-        });
-})
+    const db = client.db('computacion')
+    const computacion = await db.collection('articulos').find().toArray()
+    await disconnectToMongodb()
+    res.json(computacion)
+});
 
+//Ruta para filtrar productos por nombre
+app.get('/computacion/nombre/:letra', async (req, res) => {
+    const nombre_producto = req.params.nombre;
+    const client = await connectToMongodb();
+    if (!client) {
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
+    }
+    const letraInicio = req.params.letra.toLowerCase(); // Letra específica con la que quieres empezar
+    const regex = new RegExp(`^${letraInicio}`, 'i');
+    const db = client.db('computacion')
+    const computacion = await db.collection('articulos').find({ nombre: regex}).toArray()
+    await disconnectToMongodb()
+    computacion.length == 0 ? res.status(404).send('No encontre el articulo con el nombre '+ nombre_producto): res.json(computacion)
+});
+
+app.post('/computacion', async (req, res) => {
+    const nuevo_producto = req.body;
+    if (nuevo_producto === undefined){
+        res.status(400).send('Error en el formato de datos a crear');
+    }
+    const client = await connectToMongodb();
+    if (!client){
+        res.status(500).send('Error al conectarse a MongoDB')
+        return;
+    }
+    const db = client.db('computacion') 
+    const collection = await db.collection('articulos').insertOne(nuevo_producto)
+        .then(() => {
+            console.log('Nuevo producto creado')
+            res.status(201).send(nuevo_producto)
+        }).catch(err => { 
+            console.error(err)
+        }).finally(() => { client.close()})
+})
 
 
 
 // Metodo de actualizacion
 app.put('/computacion/:codigo', async (req, res) => { 
     const codigo = parseInt(req.params.codigo) || 0;
-    const nuevosDatos = req.body;
+    const nuevosDatos = req.body
     if (!nuevosDatos) {
-        res.status(400).send('Error en el formato de los datos recibidos');
+        res.status(400).send('Error en el formato de los datos recibidos')
     }
     const client = await connectToMongodb();
     if (!client) {
@@ -167,10 +115,10 @@ app.put('/computacion/:codigo', async (req, res) => {
         }).catch(err => { 
             let mensaje = 'Error al actualizar ID: ' + codigo 
             console.error(err)
-            res.status(500).json({descripcion : mensaje, objeto: nuevosDatos});
+            res.status(500).json({descripcion : mensaje, objeto: nuevosDatos})
         }).finally(() => {
-            client.close();
-        });
+            client.close()
+        })
 })
 
 // Metodo de eliminacion
@@ -197,7 +145,7 @@ app.delete('/computacion/:codigo', async (req, res) => {
             }
         }).catch((err) => {
             console.error(err)
-             res.status(500).send('Error al eliminar artículo')
+             res.status(500).send('Error al eliminar articulo')
             }).finally(() => {
                 client.close()
             })
