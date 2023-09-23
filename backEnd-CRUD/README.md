@@ -1,5 +1,5 @@
 # Grupo-1
-Melina Figueroa - Celeste Demaria - Anicia Flores - Rocío (apellido?) Jazmin Araniti? - Berenice Bau? (creo que estas chicas no siguieron :( 
+Melina Figueroa - Celeste Demaria - Anicia Flores - Rocío Albariño -
 
 
 
@@ -39,6 +39,13 @@ Melina Figueroa - Celeste Demaria - Anicia Flores - Rocío (apellido?) Jazmin Ar
 ## Descripción
 Bienvenidos a la API de Artículos de Computación. Esta API proporciona acceso a una base de datos de artículos relacionados con la computación.
 
+## Para levantar el proyecto utilizar los siguientes comandos:
+
+1. npm init -y
+2. npm i nodemon 
+3. npm i express
+4. npm i dotenv
+5. npm start
 
 
 ## Endpoint Principal
@@ -153,13 +160,14 @@ http://localhost:3008/computacion/nombre/r
   }
 ]
 
+
 ### 5. Crear un nuevo artículo de computación
 - Método: POST
 - Ruta: /computacion
 - Descripción: Este endpoint permite agregar un nuevo artículo de computación a la base de datos.
 - Ejemplo de solicitud:
 
-http://localhost:3008/computacion
+http://localhost:3008/computacion/32
 
 - Ejemplo de respuesta (201 Created):
   
@@ -171,45 +179,38 @@ http://localhost:3008/computacion
     }
 
 
-### 6. Actualizar un artículo de computación por ID
-- Método: PUT
-- Ruta: /computacion/:id
-- Descripción: Este endpoint permite actualizar los datos de un artículo de computación existente por su ID.
-- Parámetros de URL: id (entero): El ID del artículo a actualizar.
-- Ejemplo de solicitud:
-
-¡AQUÍ va el ejemplo de la solicitud para actualizar un artículo por ID!
-
-- Ejemplo de respuesta (200 OK):
-  
-¡AQUÍ va el ejemplo respuesta de la actualización por ID!
-
-
-### 7. Actualizar un artículo de computación por código
+### 6. Actualizar un artículo de computación por código
 - Método: PUT
 - Ruta: /computacion/:codigo
 - Descripción: Este endpoint permite actualizar los datos de un artículo de computación existente por su codigo.
 - Parámetros de URL: codigo (entero): El codigo del artículo a actualizar.
 - Ejemplo de solicitud:
 
-¡AQUÍ va el ejemplo de la solicitud para actualizar un artículo por código!
+http://localhost:3008/computacion/7
+
+JSON Content:
+{
+  "precio": 29.99
+}
 
 - Ejemplo de respuesta (200 OK):
   
-¡AQUÍ va el ejemplo respuesta de la actualización por código!
+{
+  "descripcion": "Articulo actualizado ID : 7",
+  "objeto": {
+    "precio": 29.99
+  }
+}
 
-### 8. Eliminar un artículo de computación por código
+
+### 7. Eliminar un artículo de computación por código
 - Método: DELETE
 - Ruta: /computacion/:codigo
 - Descripción: Este endpoint permite eliminar un artículo de computación por su código.
 - Parámetros de URL: codigo (entero): El código del artículo a eliminar.
 - Ejemplo de solicitud:
 
-¡AQUÍ va el ejemplo de la solicitud para eliminar un artículo por código!
-
-- Ejemplo de respuesta (204 No Content):  
-  
-'Articulo eliminado'
+http://localhost:3008/computacion/31
 
 ***
 
