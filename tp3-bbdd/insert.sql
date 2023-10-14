@@ -38,25 +38,13 @@ VALUES ('Drama, Suceso Real'),
 
 -- Insertar datos en la tabla Cartelera_Catalogo
 INSERT INTO Cartelera_Catalogo (Titulo, Resumen, Temporadas, Poster, Trailer, ID_Genero, ID_Categoria, ID_Tag)
-VALUES ('The Crown', 'Este drama narra las rivalidades políticas...', 4, './posters/1.jpg', 'https://www.youtube.com/embed/JWtnJjn6ng0', 1, 2),
-       ('Riverdale', 'El paso a la edad adulta incluye sexo, romance, escuela y familia...', 5, './posters/2.jpg', 'https://www.youtube.com/embed/HxtLlByaYTc', 2, 4),
+VALUES ('The Crown', 'Este drama narra las rivalidades políticas...', 4, './posters/1.jpg', 'https://www.youtube.com/embed/JWtnJjn6ng0', 2, 1, 4),
+       ('Riverdale', 'El paso a la edad adulta incluye sexo, romance, escuela y familia...', 5, './posters/2.jpg', 'https://www.youtube.com/embed/HxtLlByaYTc', 3, 1, 7),
        ('The Mandalorian', 'Ambientada tras la caída del Imperio...', 2, './posters/3.jpg', 'https://www.youtube.com/embed/aOC8E8z_ifw', 1, 3, 1),;
 
 
 
 
-
-
-
-
-
-*Cartelera_Catalogo:*
-
-sql
-INSERT INTO Cartelera_Catalogo (Titulo, Resumen, Temporadas, Poster, Trailer, ID_Genero, ID_Categoria, ID_Tag)
-VALUES ('Título de la Película/Serie 1', 'Resumen de la película/serie 1', 3, 'poster1.jpg', 'trailer1.mp4', 1, 1, 1),
-       ('Título de la Película/Serie 2', 'Resumen de la película/serie 2', 2, 'poster2.jpg', 'trailer2.mp4', 2, 2, 2),
-       ('Título de la Película/Serie 3', 'Resumen de la película/serie 3', 1, 'poster3.jpg', 'trailer3.mp4', 3, 3, 3);
 
 
 *Reparto:*
