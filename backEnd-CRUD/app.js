@@ -71,7 +71,7 @@ app.get('/computacion/nombre/:letra', async (req, res) => {
     await disconnectToMongodb()
     computacion.length == 0 ? res.status(404).send('No encontre el articulo con el nombre '+ nombre_producto): res.json(computacion)
 });
-
+// Metodo para agregar
 app.post('/computacion', async (req, res) => {
     const nuevo_producto = req.body;
     if (nuevo_producto === undefined){
