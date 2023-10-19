@@ -197,3 +197,6 @@ Hemos establecido relaciones clave entre las tablas:
 - La tabla 'Reparto' establece relaciones entre películas/series y actores mediante las columnas 'ID_Película/Serie' e 'ID_Actor,' respectivamente.
 
 Estas relaciones se han diseñado con el objetivo de cumplir rigurosamente con la Tercera Forma Normal (3FN), asegurando que no haya dependencias transitivas y que los datos estén organizados en tablas relacionales de manera óptima.
+
+## Diagrama Entidad-Relación:
+![DER de trailerflix](https://drive.google.com/file/d/11QPMk7JawOEpthEKagq9lj5rXS6xph4v/view?usp=sharing)
