@@ -45,8 +45,7 @@ VALUES ('Drama'),
 INSERT INTO cartelera (titulo, resumen, poster, temporadas, trailer, tipo, id_genero, id_categoria, id_tag)
 VALUES ('The Crown', 'Este drama narra las rivalidades políticas...', './posters/1.jpg', 4, 'https://www.youtube.com/embed/JWtnJjn6ng0', 'serie', 2, 1, 1),
        ('Riverdale', 'El paso a la edad adulta incluye sexo, romance, escuela y familia...', './posters/2.jpg', 5, 'https://www.youtube.com/embed/HxtLlByaYTc', 'serie', 3, 1, 1),
-       ('The Mandalorian', 'Ambientada tras la caída del Imperio...', './posters/3.jpg', 2, 'https://www.youtube.com/embed/aOC8E8z_ifw', 'serie', 1, 1, 3),;
-
+       ('The Mandalorian', 'Ambientada tras la caída del Imperio...', './posters/3.jpg', 2, 'https://www.youtube.com/embed/aOC8E8z_ifw', 'serie', 1, 1, 3);
 
 -- Para la tabla pelicula_tags
 INSERT INTO peliculas_tags (id_pelicula_serie, id_tags)
