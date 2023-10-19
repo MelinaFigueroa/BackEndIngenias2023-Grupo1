@@ -1,53 +1,55 @@
--- Usar la Base de Datos Trailerflix
-USE Trailerflix;
+create database trailerflix;
 
-CREATE TABLE Actores (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_Actor VARCHAR(255) NOT NULL
+use trailerflix;
+
+create table if not exists genero(
+id int primary key auto_increment not null
+,nombre varchar(50)
 );
 
-CREATE TABLE Categorias (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_Categoria VARCHAR(255) NOT NULL
+create table if not exists categoria(
+id int primary key auto_increment not null
+,nombre varchar(50)
 );
 
-CREATE TABLE Genero (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_Genero VARCHAR(255) NOT NULL
+create table if not exists actores(
+id int primary key auto_increment not null
+,nombre varchar(100)
 );
 
-CREATE TABLE Tags (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_Tag VARCHAR(255) NOT NULL
+create table if not exists tag(
+id int primary key auto_increment not null
+,nombre varchar(255)
 );
 
-CREATE TABLE Reparto (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Pelicula_Serie INT,
-    ID_Actor INT,
-    FOREIGN KEY (ID_Pelicula_Serie) REFERENCES Cartelera_Catalogo(ID),
-    FOREIGN KEY (ID_Actor) REFERENCES Actores(ID)
+create table if not exists cartelera(
+id int primary key auto_increment not null
+,titulo varchar(150) not null
+,resumen text default null
+,poster varchar(255) default null
+,temporadas int default null
+,trailer varchar(255)
+,tipo enum('pelicula','serie')
+,id_genero int default null
+,id_categoria int default null
+,id_tags int default null
+,FOREIGN KEY (id_genero) REFERENCES genero(id)
+,FOREIGN KEY (id_categoria) REFERENCES categoria(id)
+,FOREIGN KEY (id_tags) REFERENCES tag(id)
 );
 
-CREATE TABLE Peliculas_Tags (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Pelicula_Serie INT,
-    ID_Tag INT,
-    FOREIGN KEY (ID_Pelicula_Serie) REFERENCES Cartelera_Catalogo(ID),
-    FOREIGN KEY (ID_Tag) REFERENCES Tags(ID)
+create table if not exists pelicula_tags(
+id int primary key auto_increment not null
+,id_pelicula_serie int
+,id_tags int
+,FOREIGN KEY (id_pelicula_serie) REFERENCES cartelera(id)
+,FOREIGN KEY (id_tags) REFERENCES tag(id)
 );
 
-CREATE TABLE Cartelera_Catalogo (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Titulo VARCHAR(255) NOT NULL,
-    Resumen TEXT,
-    Temporadas INT,
-    Poster VARCHAR(255),
-    Trailer VARCHAR(255),
-    ID_Genero INT,
-    ID_Categoria INT,
-    ID_Tag INT,
-    FOREIGN KEY (ID_Genero) REFERENCES Genero(ID),
-    FOREIGN KEY (ID_Categoria) REFERENCES Categorias(ID),
-    FOREIGN KEY (ID_Tag) REFERENCES Tags(ID)
+create table if not exists reparto(
+id int primary key auto_increment not null
+,id_pelicula_serie int
+,id_actor int
+,FOREIGN KEY (id_pelicula_serie) REFERENCES cartelera(id)
+,FOREIGN KEY (id_actor) REFERENCES actores(id)
 );
