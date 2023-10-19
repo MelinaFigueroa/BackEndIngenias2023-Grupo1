@@ -199,4 +199,4 @@ Hemos establecido relaciones clave entre las tablas:
 Estas relaciones se han diseñado con el objetivo de cumplir rigurosamente con la Tercera Forma Normal (3FN), asegurando que no haya dependencias transitivas y que los datos estén organizados en tablas relacionales de manera óptima.
 
 ## Diagrama Entidad-Relación:
-![DER de trailerflix](https://drive.google.com/file/d/11QPMk7JawOEpthEKagq9lj5rXS6xph4v/view?usp=sharing)
+![DER de trailerflix](https://i.ibb.co/ryNCmNd/dertrailerflix.png)
