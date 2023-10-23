@@ -1,4 +1,9 @@
 -- 1. Obtener una lista de películas por género. Realizar una consulta que devuelva todas las películas de un género específico. Por ejemplo, mostrar todas las películas de género "Acción", "Terror" o "Suspenso".
+select c.titulo
+from cartelera as c
+join genero as g 
+on c.id_genero = g.id
+where g.nombre in ('Acción','Terror','Suspenso');
 
 -- 2. Obtener una lista de películas por tags. Realizar una consulta que devuelva todas las películas con los tags "Aventura" y "Ciencia Ficción" o "Aventura" y "Fantasía".
 
