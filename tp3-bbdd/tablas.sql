@@ -32,10 +32,8 @@ id int primary key auto_increment not null
 ,tipo enum('pelicula','serie')
 ,id_genero int default null
 ,id_categoria int default null
-,id_tags int default null
 ,FOREIGN KEY (id_genero) REFERENCES genero(id)
 ,FOREIGN KEY (id_categoria) REFERENCES categoria(id)
-,FOREIGN KEY (id_tags) REFERENCES tag(id)
 );
 
 create table if not exists pelicula_tags(
