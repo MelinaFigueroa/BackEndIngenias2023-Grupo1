@@ -70,8 +70,6 @@ Hemos establecido relaciones clave entre las tablas:
 
 - La tabla 'Cartelera/Catálogo' se relaciona con la tabla 'Categorías' mediante la columna 'ID_Categoría,' facilitando la clasificación de películas o series en categorías específicas.
 
-- La tabla 'Cartelera/Catálogo' se vincula con la tabla 'Tags' mediante la columna 'ID_Tags,' permitiendo la asociación de etiquetas particulares con cada película o serie.
-
 - La tabla 'Peliculas_Tags' permite etiquetar películas/series con palabras clave específicas y asociar múltiples etiquetas con una película o serie.
 
 - La tabla 'Reparto' establece relaciones entre películas/series y actores mediante las columnas 'ID_Película/Serie' e 'ID_Actor,' respectivamente.
